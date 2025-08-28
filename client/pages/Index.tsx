@@ -458,7 +458,9 @@ function Header({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
   return (
-    <header className="sticky top-0 z-40">
+    <header className={`sticky top-0 z-40 transition-transform duration-300 ease-in-out ${
+      isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <a
           href="#"
