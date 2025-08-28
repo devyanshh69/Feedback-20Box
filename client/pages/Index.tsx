@@ -218,25 +218,25 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
             <form onSubmit={handleAdminLogin} className="space-y-4">
               <div>
                 <label className="block text-sm text-white/70 mb-1">
-                  Username (use: admin@123)
+                  <p>Username </p>
                 </label>
                 <input
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder="admin@123"
+                  placeholder=""
                 />
               </div>
               <div>
                 <label className="block text-sm text-white/70 mb-1">
-                  Password (use: adm123)
+                  <p>Password </p>
                 </label>
                 <input
                   type="password"
                   value={adminPass}
                   onChange={(e) => setAdminPass(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder="adm123"
+                  placeholder=""
                 />
               </div>
               {error && (
@@ -249,7 +249,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
           )}
 
           <p className="mt-6 text-xs text-white/60">
-            Admin credentials: username "admin@123" and password "adm123".
+            <br />
           </p>
         </div>
       </div>
