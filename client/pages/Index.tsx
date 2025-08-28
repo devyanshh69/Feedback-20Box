@@ -46,6 +46,7 @@ type UserType = {
   email?: string;
   username?: string;
   name: string;
+  avatar?: string; // emoji avatar
 };
 
 // Local storage keys
