@@ -840,7 +840,12 @@ export default function Index() {
   });
 
   useEffect(() => {
-    const onStorage = () => setUser((u) => u ? JSON.parse(localStorage.getItem(LS_KEYS.currentUser) || "null") : u);
+    const onStorage = () => {
+      try {
+        const raw = localStorage.getItem(LS_KEYS.currentUser);
+        setUser(raw ? (JSON.parse(raw) as UserType) : null);
+      } catch {}
+    };
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
   }, []);
