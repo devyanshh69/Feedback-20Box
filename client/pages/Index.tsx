@@ -135,7 +135,7 @@ const AVATARS = [
   "👩🏽",
   "👩🏾",
   "👨🏻",
-  "👨🏼",
+  "��🏼",
   "👨🏽",
 ];
 
@@ -426,10 +426,12 @@ function Header({
   notifications?: { id: string; text: string; status: Feedback["status"] }[];
 }) {
   const [open, setOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const hasAlert = notifications?.some((n) => n.status !== "pending");
 
-  const confirmAndLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) onLogout();
+  const handleLogout = () => {
+    setShowLogoutModal(false);
+    onLogout();
   };
   return (
     <header className="sticky top-0 z-40">
