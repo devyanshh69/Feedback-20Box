@@ -515,6 +515,8 @@ function FeedbackCard({
 function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => void }) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [active, setActive] = useState<"feed" | "new" | "profile">("feed");
+  const [selCat, setSelCat] = useState<string>("faculty");
+  const [customCat, setCustomCat] = useState<string>("");
 
   useEffect(() => {
     saveFeedbacks(feedbacks);
@@ -526,16 +528,15 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
   function submitFeedback(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const category = (fd.get("category") as string) || "faculty";
-    const customCategory = (fd.get("customCategory") as string) || undefined;
     const content = (fd.get("content") as string).trim();
     if (!content) return;
     const item: Feedback = {
       id: genId("fb"),
       authorId: user.id,
       authorName: user.name,
-      category,
-      customCategory: category === "custom" ? customCategory : undefined,
+      authorAvatar: user.avatar,
+      category: selCat,
+      customCategory: selCat === "others" && customCat ? customCat : undefined,
       content,
       status: "pending",
       votes: [],
@@ -543,7 +544,9 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
       createdAt: Date.now(),
     };
     setFeedbacks((prev) => [item, ...prev]);
-    e.currentTarget.reset();
+    setSelCat("faculty");
+    setCustomCat("");
+    (e.currentTarget as HTMLFormElement).reset();
     setActive("feed");
   }
 
