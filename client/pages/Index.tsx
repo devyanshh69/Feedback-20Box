@@ -383,8 +383,8 @@ function LogoutConfirmModal({ isOpen, onClose, onConfirm, userName }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative glass rounded-xl p-6 w-full max-w-md">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onClose} />
+      <div className="relative glass rounded-xl p-6 w-full max-w-md mx-auto my-auto transform transition-all duration-200 scale-100">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
             <LogOut className="w-5 h-5 text-red-400" />
