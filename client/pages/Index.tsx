@@ -588,30 +588,37 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
           {active === "new" && (
             <form onSubmit={submitFeedback} className="glass rounded-xl p-4 md:p-6 space-y-4">
               <h2 className="text-lg font-semibold">Submit New Feedback</h2>
-              <div className="grid sm:grid-cols-2 gap-3">
+              <div className="space-y-3">
                 <div>
                   <label className="block text-sm text-white/70 mb-1">Category</label>
-                  <select
-                    name="category"
-                    className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                    defaultValue="faculty"
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                    <option value="custom">Custom</option>
-                  </select>
+                  <div className="flex flex-wrap gap-2">
+                    {CATEGORIES.map((c) => {
+                      const s = CATEGORY_STYLES[c];
+                      const active = selCat === c;
+                      return (
+                        <button
+                          type="button"
+                          key={c}
+                          onClick={() => setSelCat(c)}
+                          className={`px-3 py-1.5 rounded-lg border transition ${s.bg} ${s.border} ${s.text} ${active ? "ring-2 ring-white/30" : "hover:bg-white/10"}`}
+                        >
+                          {c}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm text-white/70 mb-1">Custom topic</label>
-                  <input
-                    name="customCategory"
-                    className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                    placeholder="Write your own topic"
-                  />
-                </div>
+                {selCat === "others" && (
+                  <div>
+                    <label className="block text-sm text-white/70 mb-1">Other topic</label>
+                    <input
+                      value={customCat}
+                      onChange={(e) => setCustomCat(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+                      placeholder="Write your own topic"
+                    />
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm text-white/70 mb-1">Your feedback</label>
