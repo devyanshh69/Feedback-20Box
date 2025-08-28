@@ -717,7 +717,7 @@ function StudentDashboard({
                     </svg>
                   </button>
                   {menuOpen && (
-                    <div className="absolute z-20 mt-2 w-full glass rounded-lg p-1 max-h-56 overflow-auto">
+                    <div className="absolute z-20 mt-2 w-full backdrop-blur-xl border border-white/10 shadow-lg bg-black rounded-lg p-1 max-h-56 overflow-auto">
                       {CATEGORIES.map((c) => {
                         const s = CATEGORY_STYLES[c];
                         return (
