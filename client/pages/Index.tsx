@@ -31,6 +31,7 @@ type Feedback = {
   id: string;
   authorId: string;
   authorName: string;
+  authorAvatar?: string;
   category: string;
   customCategory?: string;
   content: string;
@@ -216,7 +217,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder="••••••••"
+                  placeholder="••••��•••"
                   required
                 />
               </div>
