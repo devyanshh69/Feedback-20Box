@@ -466,15 +466,7 @@ function Header({
           href="#"
           className="inline-flex items-center gap-2 font-extrabold text-lg"
         >
-          <div
-            className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 drop-shadow-glow sm:bg-gradient-to-br"
-            style={{
-              backgroundImage: window.innerWidth <= 640 ? 'url(https://cdn.builder.io/api/v1/image/assets%2Fe23b91e5618940f6856f4b7325f6f25e%2F33e18f4ea18f4977b34451309cc83ce7)' : undefined,
-              backgroundRepeat: window.innerWidth <= 640 ? 'no-repeat' : undefined,
-              backgroundPosition: window.innerWidth <= 640 ? 'center' : undefined,
-              backgroundSize: window.innerWidth <= 640 ? 'cover' : undefined,
-            }}
-          />
+          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 drop-shadow-glow header-logo" />
           Anonymous Feedback Box
         </a>
         <div className="flex items-center gap-3">
