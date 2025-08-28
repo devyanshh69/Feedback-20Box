@@ -94,7 +94,9 @@
 }
 
 @layer base {
-  * { @apply border-border; }
+  * {
+    @apply border-border;
+  }
 
   body {
     @apply bg-background text-foreground antialiased relative min-h-screen overflow-x-hidden;
@@ -108,8 +110,17 @@
     inset: -20% -10% auto -10%;
     height: 60vh;
     z-index: -1;
-    background: radial-gradient(60% 60% at 30% 40%, hsla(266,85%,60%,.45) 0%, transparent 60%),
-                radial-gradient(50% 50% at 70% 60%, hsla(198,90%,50%,.35) 0%, transparent 60%);
+    background:
+      radial-gradient(
+        60% 60% at 30% 40%,
+        hsla(266, 85%, 60%, 0.45) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        50% 50% at 70% 60%,
+        hsla(198, 90%, 50%, 0.35) 0%,
+        transparent 60%
+      );
     filter: blur(60px) saturate(120%);
     transform: translateZ(0);
     pointer-events: none;
@@ -117,20 +128,35 @@
   body::after {
     inset: auto -10% -20% -10%;
     height: 50vh;
-    background: radial-gradient(60% 60% at 70% 40%, hsla(279,85%,62%,.35) 0%, transparent 60%),
-                radial-gradient(50% 50% at 30% 60%, hsla(190,90%,55%,.25) 0%, transparent 60%);
+    background:
+      radial-gradient(
+        60% 60% at 70% 40%,
+        hsla(279, 85%, 62%, 0.35) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        50% 50% at 30% 60%,
+        hsla(190, 90%, 55%, 0.25) 0%,
+        transparent 60%
+      );
     filter: blur(70px) saturate(120%);
     animation: blob 18s ease-in-out infinite;
   }
 }
 
 @layer components {
-  .glass { @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg; }
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg;
+  }
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-violet-500 to-cyan-400 hover:from-violet-400 hover:to-cyan-300 transition-colors;
   }
-  .btn-ghost { @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors; }
-  .hover-shimmer { @apply bg-shimmer-gradient bg-[length:200%_100%] animate-shimmer; }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors;
+  }
+  .hover-shimmer {
+    @apply bg-shimmer-gradient bg-[length:200%_100%] animate-shimmer;
+  }
   .tooltip-blur {
     @apply relative;
   }
@@ -138,5 +164,7 @@
     content: attr(data-title);
     @apply absolute left-1/2 -translate-x-1/2 -top-12 px-3 py-1 rounded-md text-xs text-white bg-white/10 backdrop-blur-xl border border-white/10 opacity-0 pointer-events-none transition-opacity whitespace-nowrap;
   }
-  .tooltip-blur:hover::after { @apply opacity-100; }
+  .tooltip-blur:hover::after {
+    @apply opacity-100;
+  }
 }

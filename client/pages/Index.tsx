@@ -86,13 +86,40 @@ const CATEGORY_LABELS: Record<string, string> = {
   others: "Others",
 };
 
-const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  faculty: { bg: "bg-indigo-500/15", border: "border-indigo-400/30", text: "text-indigo-300" },
-  "food and mess": { bg: "bg-amber-500/15", border: "border-amber-400/30", text: "text-amber-300" },
-  sports: { bg: "bg-emerald-500/15", border: "border-emerald-400/30", text: "text-emerald-300" },
-  academics: { bg: "bg-sky-500/15", border: "border-sky-400/30", text: "text-sky-300" },
-  facilities: { bg: "bg-violet-500/15", border: "border-violet-400/30", text: "text-violet-300" },
-  others: { bg: "bg-slate-500/15", border: "border-slate-400/30", text: "text-slate-300" },
+const CATEGORY_STYLES: Record<
+  string,
+  { bg: string; border: string; text: string }
+> = {
+  faculty: {
+    bg: "bg-indigo-500/15",
+    border: "border-indigo-400/30",
+    text: "text-indigo-300",
+  },
+  "food and mess": {
+    bg: "bg-amber-500/15",
+    border: "border-amber-400/30",
+    text: "text-amber-300",
+  },
+  sports: {
+    bg: "bg-emerald-500/15",
+    border: "border-emerald-400/30",
+    text: "text-emerald-300",
+  },
+  academics: {
+    bg: "bg-sky-500/15",
+    border: "border-sky-400/30",
+    text: "text-sky-300",
+  },
+  facilities: {
+    bg: "bg-violet-500/15",
+    border: "border-violet-400/30",
+    text: "text-violet-300",
+  },
+  others: {
+    bg: "bg-slate-500/15",
+    border: "border-slate-400/30",
+    text: "text-slate-300",
+  },
 };
 
 const AVATARS = [
@@ -185,7 +212,9 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="absolute top-6 left-0 right-0 text-center px-6">
-        <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">Anonymous Feedback Box</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">
+          Anonymous Feedback Box
+        </h1>
       </div>
       <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-stretch">
         <div className="hidden md:flex flex-col justify-between p-8 rounded-2xl glass drop-shadow-glow">
@@ -237,7 +266,9 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
           {tab === "student" ? (
             <form onSubmit={handleStudentLogin} className="space-y-4">
               <div>
-                <label className="block text-sm text-white/70 mb-1">Email</label>
+                <label className="block text-sm text-white/70 mb-1">
+                  Email
+                </label>
                 <input
                   type="email"
                   value={email}
@@ -248,7 +279,9 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                 />
               </div>
               <div>
-                <label className="block text-sm text-white/70 mb-1">Password</label>
+                <label className="block text-sm text-white/70 mb-1">
+                  Password
+                </label>
                 <input
                   type="password"
                   value={password}
@@ -259,7 +292,9 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                 />
               </div>
               <div>
-                <label className="block text-sm text-white/70 mb-2">Choose your avatar</label>
+                <label className="block text-sm text-white/70 mb-2">
+                  Choose your avatar
+                </label>
                 <div className="grid grid-cols-6 gap-2">
                   {AVATARS.map((a) => (
                     <button
@@ -267,17 +302,19 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                       key={a}
                       onClick={() => setAvatar(a)}
                       className={`grid place-items-center h-10 rounded-xl border transition ${
-                        avatar === a ? "bg-white/20 border-white/30" : "bg-white/10 border-white/10 hover:bg-white/15"
+                        avatar === a
+                          ? "bg-white/20 border-white/30"
+                          : "bg-white/10 border-white/10 hover:bg-white/15"
                       }`}
                     >
-                      <span className="text-lg leading-none select-none">{a}</span>
+                      <span className="text-lg leading-none select-none">
+                        {a}
+                      </span>
                     </button>
                   ))}
                 </div>
               </div>
-              {error && (
-                <p className="text-red-400 text-sm">{error}</p>
-              )}
+              {error && <p className="text-red-400 text-sm">{error}</p>}
               <button type="submit" className="btn-primary w-full">
                 <LogIn className="w-4 h-4" /> Login as Student
               </button>
@@ -307,9 +344,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                   placeholder=""
                 />
               </div>
-              {error && (
-                <p className="text-red-400 text-sm">{error}</p>
-              )}
+              {error && <p className="text-red-400 text-sm">{error}</p>}
               <button type="submit" className="btn-primary w-full">
                 <ShieldCheck className="w-4 h-4" /> Login as Admin
               </button>
@@ -343,7 +378,7 @@ function Header({
 }: {
   user: UserType;
   onLogout: () => void;
-  notifications?: { id: string; text: string; status: Feedback["status"]; }[];
+  notifications?: { id: string; text: string; status: Feedback["status"] }[];
 }) {
   const [open, setOpen] = useState(false);
   const hasAlert = notifications?.some((n) => n.status !== "pending");
@@ -354,7 +389,10 @@ function Header({
   return (
     <header className="sticky top-0 z-40">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="#" className="inline-flex items-center gap-2 font-extrabold text-lg">
+        <a
+          href="#"
+          className="inline-flex items-center gap-2 font-extrabold text-lg"
+        >
           <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 drop-shadow-glow" />
           Anonymous Feedback Box
         </a>
@@ -383,13 +421,11 @@ function Header({
                               n.status === "accepted"
                                 ? "bg-emerald-400"
                                 : n.status === "denied"
-                                ? "bg-red-400"
-                                : "bg-white/30"
+                                  ? "bg-red-400"
+                                  : "bg-white/30"
                             }`}
                           />
-                          <p className="text-sm text-white/90">
-                            {n.text}
-                          </p>
+                          <p className="text-sm text-white/90">{n.text}</p>
                         </div>
                       ))
                     ) : (
@@ -418,7 +454,9 @@ function CategoryChip({ label }: { label: string }) {
   const style = CATEGORY_STYLES[key] || CATEGORY_STYLES["others"];
   const display = CATEGORY_LABELS[key] || label;
   return (
-    <span className={`px-2.5 py-1 rounded-full text-xs border ${style.bg} ${style.border} ${style.text}`}>
+    <span
+      className={`px-2.5 py-1 rounded-full text-xs border ${style.bg} ${style.border} ${style.text}`}
+    >
       {display}
     </span>
   );
@@ -458,15 +496,23 @@ function FeedbackCard({
                 fb.status === "accepted"
                   ? "text-emerald-300 bg-emerald-500/10 border-emerald-400/30"
                   : fb.status === "denied"
-                  ? "text-red-300 bg-red-500/10 border-red-400/30"
-                  : "text-white/70 bg-white/5 border-white/10"
+                    ? "text-red-300 bg-red-500/10 border-red-400/30"
+                    : "text-white/70 bg-white/5 border-white/10"
               }`}
             >
-              {fb.status === "accepted" ? <Check className="w-3 h-3" /> : fb.status === "denied" ? <XCircle className="w-3 h-3" /> : <Filter className="w-3 h-3" />}
+              {fb.status === "accepted" ? (
+                <Check className="w-3 h-3" />
+              ) : fb.status === "denied" ? (
+                <XCircle className="w-3 h-3" />
+              ) : (
+                <Filter className="w-3 h-3" />
+              )}
               {fb.status}
             </span>
           </div>
-          <p className="text-sm text-white/90 mt-1 whitespace-pre-wrap">{fb.content}</p>
+          <p className="text-sm text-white/90 mt-1 whitespace-pre-wrap">
+            {fb.content}
+          </p>
         </div>
       </div>
 
@@ -552,7 +598,13 @@ function FeedbackCard({
   );
 }
 
-function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => void }) {
+function StudentDashboard({
+  user,
+  onLogout,
+}: {
+  user: UserType;
+  onLogout: () => void;
+}) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [active, setActive] = useState<"feed" | "new" | "profile">("feed");
   const [selCat, setSelCat] = useState<string>("faculty");
@@ -563,8 +615,15 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
     saveFeedbacks(feedbacks);
   }, [feedbacks]);
 
-  const myPosts = useMemo(() => feedbacks.filter((f) => f.authorId === user.id), [feedbacks, user.id]);
-  const notifications = myPosts.map((p) => ({ id: p.id, text: p.content.slice(0, 80), status: p.status }));
+  const myPosts = useMemo(
+    () => feedbacks.filter((f) => f.authorId === user.id),
+    [feedbacks, user.id],
+  );
+  const notifications = myPosts.map((p) => ({
+    id: p.id,
+    text: p.content.slice(0, 80),
+    status: p.status,
+  }));
 
   function submitFeedback(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -615,7 +674,9 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
       createdAt: Date.now(),
     };
     setFeedbacks((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, comments: [...f.comments, c] } : f)),
+      prev.map((f) =>
+        f.id === id ? { ...f, comments: [...f.comments, c] } : f,
+      ),
     );
   }
 
@@ -627,11 +688,16 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
         {/* Feed / New */}
         <section className="lg:col-span-2 space-y-4">
           {active === "new" && (
-            <form onSubmit={submitFeedback} className="glass rounded-xl p-4 md:p-6 space-y-4">
+            <form
+              onSubmit={submitFeedback}
+              className="glass rounded-xl p-4 md:p-6 space-y-4"
+            >
               <h2 className="text-lg font-semibold">Submit New Feedback</h2>
               <div className="space-y-3">
                 <div className="relative">
-                  <label className="block text-sm text-white/70 mb-1">Category</label>
+                  <label className="block text-sm text-white/70 mb-1">
+                    Category
+                  </label>
                   <button
                     type="button"
                     onClick={() => setMenuOpen((v) => !v)}
@@ -640,7 +706,15 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                     <span className="text-white/90">
                       {CATEGORY_LABELS[selCat]}
                     </span>
-                    <svg className="w-4 h-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                    <svg
+                      className="w-4 h-4 opacity-70"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
                   </button>
                   {menuOpen && (
                     <div className="absolute z-20 mt-2 w-full glass rounded-lg p-1 max-h-56 overflow-auto">
@@ -650,7 +724,10 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                           <button
                             type="button"
                             key={c}
-                            onClick={() => { setSelCat(c); setMenuOpen(false); }}
+                            onClick={() => {
+                              setSelCat(c);
+                              setMenuOpen(false);
+                            }}
                             className={`w-full text-left px-3 py-2 rounded-md border ${s.bg} ${s.border} ${s.text} hover:bg-white/10`}
                           >
                             {CATEGORY_LABELS[c]}
@@ -662,7 +739,9 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                 </div>
                 {selCat === "others" && (
                   <div>
-                    <label className="block text-sm text-white/70 mb-1">Other topic</label>
+                    <label className="block text-sm text-white/70 mb-1">
+                      Other topic
+                    </label>
                     <input
                       value={customCat}
                       onChange={(e) => setCustomCat(e.target.value)}
@@ -673,7 +752,9 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                 )}
               </div>
               <div>
-                <label className="block text-sm text-white/70 mb-1">Your feedback</label>
+                <label className="block text-sm text-white/70 mb-1">
+                  Your feedback
+                </label>
                 <textarea
                   name="content"
                   className="w-full min-h-[120px] px-3 py-2 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
@@ -726,15 +807,22 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                   <button
                     key={a}
                     className={`grid place-items-center h-10 rounded-xl border transition ${
-                      user.avatar === a ? "bg-white/20 border-white/30" : "bg-white/10 border-white/10 hover:bg-white/15"
+                      user.avatar === a
+                        ? "bg-white/20 border-white/30"
+                        : "bg-white/10 border-white/10 hover:bg-white/15"
                     }`}
                     onClick={() => {
                       const updated = { ...user, avatar: a };
-                      localStorage.setItem(LS_KEYS.currentUser, JSON.stringify(updated));
+                      localStorage.setItem(
+                        LS_KEYS.currentUser,
+                        JSON.stringify(updated),
+                      );
                       window.dispatchEvent(new StorageEvent("storage"));
                     }}
                   >
-                    <span className="text-lg leading-none select-none">{a}</span>
+                    <span className="text-lg leading-none select-none">
+                      {a}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -743,7 +831,9 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
               <p className="text-sm font-semibold mb-2">Your feedback</p>
               <div className="space-y-2 max-h-64 overflow-auto">
                 {myPosts.length === 0 && (
-                  <p className="text-sm text-white/60">You haven't shared anything yet.</p>
+                  <p className="text-sm text-white/60">
+                    You haven't shared anything yet.
+                  </p>
                 )}
                 {myPosts.map((p) => (
                   <div key={p.id} className="flex items-start gap-2">
@@ -752,11 +842,14 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
                         p.status === "accepted"
                           ? "bg-emerald-400"
                           : p.status === "denied"
-                          ? "bg-red-400"
-                          : "bg-white/30"
+                            ? "bg-red-400"
+                            : "bg-white/30"
                       }`}
                     />
-                    <p className="text-sm text-white/80 truncate" title={p.content}>
+                    <p
+                      className="text-sm text-white/80 truncate"
+                      title={p.content}
+                    >
                       {p.content}
                     </p>
                   </div>
@@ -801,7 +894,13 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
   );
 }
 
-function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => void }) {
+function AdminDashboard({
+  user,
+  onLogout,
+}: {
+  user: UserType;
+  onLogout: () => void;
+}) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [filter, setFilter] = useState<string>("all");
 
@@ -825,14 +924,32 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
   );
 
   function setStatus(id: string, status: Feedback["status"]) {
-    setFeedbacks((prev) => prev.map((f) => (f.id === id ? { ...f, status } : f)));
+    setFeedbacks((prev) =>
+      prev.map((f) => (f.id === id ? { ...f, status } : f)),
+    );
   }
 
   const analytics = useMemo(() => {
-    const byCat: Record<string, { category: string; pending: number; accepted: number; denied: number; total: number }> = {};
+    const byCat: Record<
+      string,
+      {
+        category: string;
+        pending: number;
+        accepted: number;
+        denied: number;
+        total: number;
+      }
+    > = {};
     feedbacks.forEach((f) => {
       const key = f.customCategory || f.category;
-      if (!byCat[key]) byCat[key] = { category: key, pending: 0, accepted: 0, denied: 0, total: 0 };
+      if (!byCat[key])
+        byCat[key] = {
+          category: key,
+          pending: 0,
+          accepted: 0,
+          denied: 0,
+          total: 0,
+        };
       byCat[key][f.status] += 1 as any;
       byCat[key].total += 1;
     });
@@ -880,10 +997,28 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analytics}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                  <XAxis dataKey="category" stroke="rgba(255,255,255,0.7)" tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }} />
-                  <YAxis stroke="rgba(255,255,255,0.7)" tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }} allowDecimals={false} />
-                  <Tooltip contentStyle={{ background: "rgba(0,0,0,0.6)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.08)"
+                  />
+                  <XAxis
+                    dataKey="category"
+                    stroke="rgba(255,255,255,0.7)"
+                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                  />
+                  <YAxis
+                    stroke="rgba(255,255,255,0.7)"
+                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "rgba(0,0,0,0.6)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 10,
+                      color: "white",
+                    }}
+                  />
                   <Legend wrapperStyle={{ color: "white" }} />
                   <Bar dataKey="accepted" stackId="a" fill="#34d399" />
                   <Bar dataKey="denied" stackId="a" fill="#f87171" />
@@ -894,7 +1029,9 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
           </div>
 
           {visible.length === 0 && (
-            <div className="glass rounded-xl p-6 text-white/70">No feedback to review.</div>
+            <div className="glass rounded-xl p-6 text-white/70">
+              No feedback to review.
+            </div>
           )}
           {visible.map((fb) => (
             <FeedbackCard
