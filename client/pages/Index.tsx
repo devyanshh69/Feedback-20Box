@@ -134,7 +134,7 @@ const AVATARS = [
   "👩🏼",
   "👩🏽",
   "👩🏾",
-  "👨��",
+  "👨🏻",
   "👨🏼",
   "👨🏽",
 ];
@@ -956,6 +956,7 @@ function AdminDashboard({
 }) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [filter, setFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<'feedback' | 'statistics'>('feedback');
 
   useEffect(() => {
     saveFeedbacks(feedbacks);
