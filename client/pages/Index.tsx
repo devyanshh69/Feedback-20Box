@@ -14,6 +14,8 @@ import {
   ShieldX,
   XCircle,
   Check,
+  BarChart3,
+  LogOut,
 } from "lucide-react";
 import {
   ResponsiveContainer,
