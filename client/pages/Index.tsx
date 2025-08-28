@@ -759,9 +759,9 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
 
   const categories = useMemo(() => {
     const base = new Set<string>([...CATEGORIES]);
-    // include custom categories found in data
     feedbacks.forEach((f) => {
       if (f.customCategory) base.add(f.customCategory);
+      if (f.category === "custom") base.add("others");
     });
     return ["all", ...Array.from(base)];
   }, [feedbacks]);
