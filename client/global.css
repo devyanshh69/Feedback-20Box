@@ -167,13 +167,4 @@
   .tooltip-blur:hover::after {
     @apply opacity-100;
   }
-
-  @media (max-width: 640px) {
-    .header-logo {
-      background-image: url('https://cdn.builder.io/api/v1/image/assets%2Fe23b91e5618940f6856f4b7325f6f25e%2F33e18f4ea18f4977b34451309cc83ce7') !important;
-      background-repeat: no-repeat !important;
-      background-position: center !important;
-      background-size: cover !important;
-    }
-  }
 }
