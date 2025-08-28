@@ -217,7 +217,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder="••••��•••"
+                  placeholder="••••••••"
                   required
                 />
               </div>
@@ -357,8 +357,9 @@ function Header({
 }
 
 function CategoryChip({ label }: { label: string }) {
+  const style = CATEGORY_STYLES[label] || CATEGORY_STYLES["others"];
   return (
-    <span className="px-2.5 py-1 rounded-full text-xs bg-white/10 border border-white/10">
+    <span className={`px-2.5 py-1 rounded-full text-xs border ${style.bg} ${style.border} ${style.text}`}>
       {label}
     </span>
   );
@@ -388,7 +389,7 @@ function FeedbackCard({
   return (
     <div className="glass rounded-xl p-4 md:p-5 space-y-3">
       <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400" />
+        <AvatarBubble emoji={fb.authorAvatar} size={36} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="font-semibold truncate">{fb.authorName}</p>
