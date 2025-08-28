@@ -403,7 +403,12 @@ function AvatarBubble({ emoji, size = 36 }: { emoji?: string; size?: number }) {
   );
 }
 
-function LogoutConfirmModal({ isOpen, onClose, onConfirm, userName }: {
+function LogoutConfirmModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  userName,
+}: {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -413,7 +418,10 @@ function LogoutConfirmModal({ isOpen, onClose, onConfirm, userName }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center min-h-screen p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+        onClick={onClose}
+      />
       <div className="relative glass rounded-xl p-6 w-full max-w-md transform transition-all duration-200 scale-100">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-10 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
@@ -421,11 +429,15 @@ function LogoutConfirmModal({ isOpen, onClose, onConfirm, userName }: {
           </div>
           <div>
             <h3 className="font-semibold text-white">Confirm Logout</h3>
-            <p className="text-sm text-white/70">Are you sure you want to logout?</p>
+            <p className="text-sm text-white/70">
+              Are you sure you want to logout?
+            </p>
           </div>
         </div>
         <p className="text-sm text-white/80 mb-6">
-          You will be logged out as <span className="font-medium">{userName}</span> and redirected to the login page.
+          You will be logged out as{" "}
+          <span className="font-medium">{userName}</span> and redirected to the
+          login page.
         </p>
         <div className="flex gap-3">
           <button
@@ -484,13 +496,15 @@ function Header({
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
   return (
-    <header className={`sticky top-0 z-40 transition-transform duration-300 ease-in-out ${
-      isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <header
+      className={`sticky top-0 z-40 transition-transform duration-300 ease-in-out ${
+        isHeaderVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <a
           href="#"
@@ -499,10 +513,11 @@ function Header({
           <div
             className="h-8 w-8 rounded-xl drop-shadow-glow"
             style={{
-              backgroundImage: 'url(https://cdn.builder.io/api/v1/image/assets%2Fe23b91e5618940f6856f4b7325f6f25e%2F6a1f670d95234b65b6971df5dcd52478)',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
+              backgroundImage:
+                "url(https://cdn.builder.io/api/v1/image/assets%2Fe23b91e5618940f6856f4b7325f6f25e%2F6a1f670d95234b65b6971df5dcd52478)",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
             }}
           />
           Anonymous Feedback Box
@@ -551,7 +566,10 @@ function Header({
             <AvatarBubble emoji={user.avatar} size={28} />
             <span className="text-sm">{user.name}</span>
           </div>
-          <button onClick={() => setShowLogoutModal(true)} className="btn-ghost">
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="btn-ghost"
+          >
             Logout
           </button>
         </div>
@@ -1020,7 +1038,9 @@ function AdminDashboard({
 }) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [filter, setFilter] = useState<string>("all");
-  const [activeTab, setActiveTab] = useState<'feedback' | 'statistics'>('feedback');
+  const [activeTab, setActiveTab] = useState<"feedback" | "statistics">(
+    "feedback",
+  );
 
   useEffect(() => {
     saveFeedbacks(feedbacks);
@@ -1083,22 +1103,22 @@ function AdminDashboard({
         <div className="glass rounded-xl p-4 mb-6">
           <div className="flex gap-2">
             <button
-              onClick={() => setActiveTab('feedback')}
+              onClick={() => setActiveTab("feedback")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
-                activeTab === 'feedback'
-                  ? 'bg-white/15 text-white'
-                  : 'bg-white/5 text-white/70 hover:bg-white/10'
+                activeTab === "feedback"
+                  ? "bg-white/15 text-white"
+                  : "bg-white/5 text-white/70 hover:bg-white/10"
               }`}
             >
               <MessageSquare className="w-4 h-4" />
               Feedback Review
             </button>
             <button
-              onClick={() => setActiveTab('statistics')}
+              onClick={() => setActiveTab("statistics")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
-                activeTab === 'statistics'
-                  ? 'bg-white/15 text-white'
-                  : 'bg-white/5 text-white/70 hover:bg-white/10'
+                activeTab === "statistics"
+                  ? "bg-white/15 text-white"
+                  : "bg-white/5 text-white/70 hover:bg-white/10"
               }`}
             >
               <BarChart3 className="w-4 h-4" />
@@ -1107,7 +1127,7 @@ function AdminDashboard({
           </div>
         </div>
 
-        {activeTab === 'feedback' && (
+        {activeTab === "feedback" && (
           <div className="grid lg:grid-cols-[260px_1fr] gap-6">
             {/* Taskbar / Sidebar */}
             <aside className="glass rounded-xl p-4 h-fit sticky top-20">
@@ -1135,8 +1155,8 @@ function AdminDashboard({
             <main className="space-y-4">
               <div className="glass rounded-xl p-4">
                 <p className="text-sm text-white/80">
-                  Review student feedback. Accept or deny below each post. Buttons
-                  animate on hover.
+                  Review student feedback. Accept or deny below each post.
+                  Buttons animate on hover.
                 </p>
               </div>
 
@@ -1158,7 +1178,7 @@ function AdminDashboard({
           </div>
         )}
 
-        {activeTab === 'statistics' && (
+        {activeTab === "statistics" && (
           <div className="space-y-6">
             <div className="glass rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -1195,9 +1215,24 @@ function AdminDashboard({
                       }}
                     />
                     <Legend wrapperStyle={{ color: "white" }} />
-                    <Bar dataKey="accepted" stackId="a" fill="#34d399" name="Accepted" />
-                    <Bar dataKey="denied" stackId="a" fill="#f87171" name="Denied" />
-                    <Bar dataKey="pending" stackId="a" fill="#a78bfa" name="Pending" />
+                    <Bar
+                      dataKey="accepted"
+                      stackId="a"
+                      fill="#34d399"
+                      name="Accepted"
+                    />
+                    <Bar
+                      dataKey="denied"
+                      stackId="a"
+                      fill="#f87171"
+                      name="Denied"
+                    />
+                    <Bar
+                      dataKey="pending"
+                      stackId="a"
+                      fill="#a78bfa"
+                      name="Pending"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -1212,7 +1247,7 @@ function AdminDashboard({
                   <span className="text-sm font-semibold">Accepted</span>
                 </div>
                 <p className="text-2xl font-bold text-emerald-400">
-                  {feedbacks.filter(f => f.status === 'accepted').length}
+                  {feedbacks.filter((f) => f.status === "accepted").length}
                 </p>
               </div>
 
@@ -1224,7 +1259,7 @@ function AdminDashboard({
                   <span className="text-sm font-semibold">Denied</span>
                 </div>
                 <p className="text-2xl font-bold text-red-400">
-                  {feedbacks.filter(f => f.status === 'denied').length}
+                  {feedbacks.filter((f) => f.status === "denied").length}
                 </p>
               </div>
 
@@ -1236,7 +1271,7 @@ function AdminDashboard({
                   <span className="text-sm font-semibold">Pending</span>
                 </div>
                 <p className="text-2xl font-bold text-violet-400">
-                  {feedbacks.filter(f => f.status === 'pending').length}
+                  {feedbacks.filter((f) => f.status === "pending").length}
                 </p>
               </div>
             </div>
