@@ -177,6 +177,8 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
   const [adminPass, setAdminPass] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<string>(AVATARS[0]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
 
   function handleStudentLogin(e: React.FormEvent) {
     e.preventDefault();
