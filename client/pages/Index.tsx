@@ -113,6 +113,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
   const [username, setUsername] = useState("");
   const [adminPass, setAdminPass] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<string>(AVATARS[0]);
 
   function handleStudentLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -126,6 +127,7 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
       role: "student",
       email,
       name,
+      avatar,
     };
     localStorage.setItem(LS_KEYS.currentUser, JSON.stringify(user));
     onLogin(user);
@@ -220,6 +222,23 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                   placeholder="••••••••"
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Choose your avatar</label>
+                <div className="grid grid-cols-6 gap-2">
+                  {AVATARS.map((a) => (
+                    <button
+                      type="button"
+                      key={a}
+                      onClick={() => setAvatar(a)}
+                      className={`grid place-items-center h-10 rounded-xl border transition ${
+                        avatar === a ? "bg-white/20 border-white/30" : "bg-white/10 border-white/10 hover:bg-white/15"
+                      }`}
+                    >
+                      <span className="text-lg leading-none select-none">{a}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
               {error && (
                 <p className="text-red-400 text-sm">{error}</p>
