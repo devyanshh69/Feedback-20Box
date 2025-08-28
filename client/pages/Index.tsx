@@ -63,7 +63,19 @@ const CATEGORIES = [
   "sports",
   "academics",
   "facilities",
+  "others",
 ] as const;
+
+const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
+  faculty: { bg: "bg-indigo-500/15", border: "border-indigo-400/30", text: "text-indigo-300" },
+  "food and mess": { bg: "bg-amber-500/15", border: "border-amber-400/30", text: "text-amber-300" },
+  sports: { bg: "bg-emerald-500/15", border: "border-emerald-400/30", text: "text-emerald-300" },
+  academics: { bg: "bg-sky-500/15", border: "border-sky-400/30", text: "text-sky-300" },
+  facilities: { bg: "bg-violet-500/15", border: "border-violet-400/30", text: "text-violet-300" },
+  others: { bg: "bg-slate-500/15", border: "border-slate-400/30", text: "text-slate-300" },
+};
+
+const AVATARS = ["🦊", "🐼", "🐯", "🐸", "🐵", "🐨", "🦄", "🐱", "🐶", "🚀", "🌟"];
 
 function genId(prefix: string = "id"): string {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}_${Date.now()}`;
