@@ -16,6 +16,8 @@ import {
   Check,
   BarChart3,
   LogOut,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   ResponsiveContainer,
