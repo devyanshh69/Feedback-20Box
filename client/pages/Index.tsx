@@ -661,10 +661,30 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
         <aside className="lg:col-span-1 space-y-4">
           <div className="glass rounded-xl p-5">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400" />
+              <AvatarBubble emoji={user.avatar} size={48} />
               <div>
                 <p className="font-semibold">{user.name}</p>
                 <p className="text-xs text-white/70">Anonymous profile</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="text-sm font-semibold mb-2">Pick avatar</p>
+              <div className="grid grid-cols-6 gap-2">
+                {AVATARS.map((a) => (
+                  <button
+                    key={a}
+                    className={`grid place-items-center h-10 rounded-xl border transition ${
+                      user.avatar === a ? "bg-white/20 border-white/30" : "bg-white/10 border-white/10 hover:bg-white/15"
+                    }`}
+                    onClick={() => {
+                      const updated = { ...user, avatar: a };
+                      localStorage.setItem(LS_KEYS.currentUser, JSON.stringify(updated));
+                      window.dispatchEvent(new StorageEvent("storage"));
+                    }}
+                  >
+                    <span className="text-lg leading-none select-none">{a}</span>
+                  </button>
+                ))}
               </div>
             </div>
             <div className="mt-4">
