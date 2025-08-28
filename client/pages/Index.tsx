@@ -355,13 +355,26 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                 <label className="block text-sm text-white/70 mb-1">
                   <p>Password </p>
                 </label>
-                <input
-                  type="password"
-                  value={adminPass}
-                  onChange={(e) => setAdminPass(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder=""
-                />
+                <div className="relative">
+                  <input
+                    type={showAdminPassword ? "text" : "password"}
+                    value={adminPass}
+                    onChange={(e) => setAdminPass(e.target.value)}
+                    className="w-full px-4 py-3 pr-12 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+                    placeholder=""
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowAdminPassword(!showAdminPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/80 transition-colors"
+                  >
+                    {showAdminPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
               {error && <p className="text-red-400 text-sm">{error}</p>}
               <button type="submit" className="btn-primary w-full">
