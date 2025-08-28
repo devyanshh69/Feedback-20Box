@@ -270,6 +270,17 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
   );
 }
 
+function AvatarBubble({ emoji, size = 36 }: { emoji?: string; size?: number }) {
+  return (
+    <div
+      style={{ width: size, height: size, fontSize: Math.floor(size * 0.55) }}
+      className="shrink-0 grid place-items-center rounded-xl bg-white/10 border border-white/10"
+    >
+      <span className="leading-none select-none">{emoji || "👤"}</span>
+    </div>
+  );
+}
+
 function Header({
   user,
   onLogout,
@@ -332,7 +343,7 @@ function Header({
             </div>
           )}
           <div className="hidden sm:flex items-center gap-3 px-3 py-2 rounded-xl glass">
-            <CircleUser className="w-5 h-5" />
+            <AvatarBubble emoji={user.avatar} size={28} />
             <span className="text-sm">{user.name}</span>
           </div>
           <button onClick={onLogout} className="btn-ghost">
