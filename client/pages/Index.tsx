@@ -1014,89 +1014,170 @@ function AdminDashboard({
     <div className="min-h-screen">
       <Header user={user} onLogout={onLogout} />
 
-      <div className="container mx-auto px-4 mt-6 grid lg:grid-cols-[260px_1fr] gap-6">
-        {/* Taskbar / Sidebar */}
-        <aside className="glass rounded-xl p-4 h-fit sticky top-20">
-          <p className="font-semibold mb-3 flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Categories
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setFilter(c)}
-                className={`px-3 py-2 rounded-lg text-left border transition ${
-                  filter === c
-                    ? "bg-white/15 border-white/15"
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
-                }`}
-              >
-                {c === "all" ? "All" : CATEGORY_LABELS[c] || c}
-              </button>
-            ))}
+      <div className="container mx-auto px-4 mt-6">
+        {/* Tab Navigation */}
+        <div className="glass rounded-xl p-4 mb-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab('feedback')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === 'feedback'
+                  ? 'bg-white/15 text-white'
+                  : 'bg-white/5 text-white/70 hover:bg-white/10'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              Feedback Review
+            </button>
+            <button
+              onClick={() => setActiveTab('statistics')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === 'statistics'
+                  ? 'bg-white/15 text-white'
+                  : 'bg-white/5 text-white/70 hover:bg-white/10'
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              Statistics
+            </button>
           </div>
-        </aside>
+        </div>
 
-        {/* Main content */}
-        <main className="space-y-4">
-          <div className="glass rounded-xl p-4">
-            <p className="text-sm text-white/80">
-              Review student feedback. Accept or deny below each post. Buttons
-              animate on hover.
-            </p>
+        {activeTab === 'feedback' && (
+          <div className="grid lg:grid-cols-[260px_1fr] gap-6">
+            {/* Taskbar / Sidebar */}
+            <aside className="glass rounded-xl p-4 h-fit sticky top-20">
+              <p className="font-semibold mb-3 flex items-center gap-2">
+                <Filter className="w-4 h-4" /> Categories
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
+                {categories.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setFilter(c)}
+                    className={`px-3 py-2 rounded-lg text-left border transition ${
+                      filter === c
+                        ? "bg-white/15 border-white/15"
+                        : "bg-white/5 border-white/10 hover:bg-white/10"
+                    }`}
+                  >
+                    {c === "all" ? "All" : CATEGORY_LABELS[c] || c}
+                  </button>
+                ))}
+              </div>
+            </aside>
+
+            {/* Main content */}
+            <main className="space-y-4">
+              <div className="glass rounded-xl p-4">
+                <p className="text-sm text-white/80">
+                  Review student feedback. Accept or deny below each post. Buttons
+                  animate on hover.
+                </p>
+              </div>
+
+              {visible.length === 0 && (
+                <div className="glass rounded-xl p-6 text-white/70">
+                  No feedback to review.
+                </div>
+              )}
+              {visible.map((fb) => (
+                <FeedbackCard
+                  key={fb.id}
+                  fb={fb}
+                  canModerate
+                  onAccept={() => setStatus(fb.id, "accepted")}
+                  onDeny={() => setStatus(fb.id, "denied")}
+                />
+              ))}
+            </main>
           </div>
+        )}
 
-          <div className="glass rounded-xl p-4">
-            <p className="text-sm font-semibold mb-2">Analytics</p>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analytics}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.08)"
-                  />
-                  <XAxis
-                    dataKey="category"
-                    stroke="rgba(255,255,255,0.7)"
-                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-                  />
-                  <YAxis
-                    stroke="rgba(255,255,255,0.7)"
-                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-                    allowDecimals={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      background: "rgba(0,0,0,0.6)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 10,
-                      color: "white",
-                    }}
-                  />
-                  <Legend wrapperStyle={{ color: "white" }} />
-                  <Bar dataKey="accepted" stackId="a" fill="#34d399" />
-                  <Bar dataKey="denied" stackId="a" fill="#f87171" />
-                  <Bar dataKey="pending" stackId="a" fill="#a78bfa" />
-                </BarChart>
-              </ResponsiveContainer>
+        {activeTab === 'statistics' && (
+          <div className="space-y-6">
+            <div className="glass rounded-xl p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
+                Feedback Analytics
+              </h2>
+              <p className="text-sm text-white/80 mb-6">
+                Overview of feedback submissions by category and status.
+              </p>
+
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.08)"
+                    />
+                    <XAxis
+                      dataKey="category"
+                      stroke="rgba(255,255,255,0.7)"
+                      tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                    />
+                    <YAxis
+                      stroke="rgba(255,255,255,0.7)"
+                      tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: "rgba(0,0,0,0.8)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: 10,
+                        color: "white",
+                      }}
+                    />
+                    <Legend wrapperStyle={{ color: "white" }} />
+                    <Bar dataKey="accepted" stackId="a" fill="#34d399" name="Accepted" />
+                    <Bar dataKey="denied" stackId="a" fill="#f87171" name="Denied" />
+                    <Bar dataKey="pending" stackId="a" fill="#a78bfa" name="Pending" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Accepted</span>
+                </div>
+                <p className="text-2xl font-bold text-emerald-400">
+                  {feedbacks.filter(f => f.status === 'accepted').length}
+                </p>
+              </div>
+
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-red-500/20 border border-red-400/30 flex items-center justify-center">
+                    <XCircle className="w-4 h-4 text-red-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Denied</span>
+                </div>
+                <p className="text-2xl font-bold text-red-400">
+                  {feedbacks.filter(f => f.status === 'denied').length}
+                </p>
+              </div>
+
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-violet-500/20 border border-violet-400/30 flex items-center justify-center">
+                    <Filter className="w-4 h-4 text-violet-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Pending</span>
+                </div>
+                <p className="text-2xl font-bold text-violet-400">
+                  {feedbacks.filter(f => f.status === 'pending').length}
+                </p>
+              </div>
             </div>
           </div>
-
-          {visible.length === 0 && (
-            <div className="glass rounded-xl p-6 text-white/70">
-              No feedback to review.
-            </div>
-          )}
-          {visible.map((fb) => (
-            <FeedbackCard
-              key={fb.id}
-              fb={fb}
-              canModerate
-              onAccept={() => setStatus(fb.id, "accepted")}
-              onDeny={() => setStatus(fb.id, "denied")}
-            />
-          ))}
-        </main>
+        )}
       </div>
     </div>
   );
