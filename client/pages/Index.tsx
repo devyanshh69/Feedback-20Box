@@ -77,6 +77,15 @@ const CATEGORIES = [
   "others",
 ] as const;
 
+const CATEGORY_LABELS: Record<string, string> = {
+  faculty: "Faculty",
+  "food and mess": "Food and Mess",
+  sports: "Sports",
+  academics: "Academics",
+  facilities: "Facilities",
+  others: "Others",
+};
+
 const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
   faculty: { bg: "bg-indigo-500/15", border: "border-indigo-400/30", text: "text-indigo-300" },
   "food and mess": { bg: "bg-amber-500/15", border: "border-amber-400/30", text: "text-amber-300" },
@@ -86,7 +95,20 @@ const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string
   others: { bg: "bg-slate-500/15", border: "border-slate-400/30", text: "text-slate-300" },
 };
 
-const AVATARS = ["🦊", "🐼", "🐯", "🐸", "🐵", "🐨", "🦄", "🐱", "🐶", "🚀", "🌟"];
+const AVATARS = [
+  "🧑🏻",
+  "🧑🏼",
+  "🧑🏽",
+  "🧑🏾",
+  "🧑🏿",
+  "👩🏻",
+  "👩🏼",
+  "👩🏽",
+  "👩🏾",
+  "👨🏻",
+  "👨🏼",
+  "👨🏽",
+];
 
 function genId(prefix: string = "id"): string {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}_${Date.now()}`;
@@ -392,10 +414,12 @@ function Header({
 }
 
 function CategoryChip({ label }: { label: string }) {
-  const style = CATEGORY_STYLES[label] || CATEGORY_STYLES["others"];
+  const key = label.toLowerCase();
+  const style = CATEGORY_STYLES[key] || CATEGORY_STYLES["others"];
+  const display = CATEGORY_LABELS[key] || label;
   return (
     <span className={`px-2.5 py-1 rounded-full text-xs border ${style.bg} ${style.border} ${style.text}`}>
-      {label}
+      {display}
     </span>
   );
 }
@@ -533,6 +557,7 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
   const [active, setActive] = useState<"feed" | "new" | "profile">("feed");
   const [selCat, setSelCat] = useState<string>("faculty");
   const [customCat, setCustomCat] = useState<string>("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     saveFeedbacks(feedbacks);
@@ -605,24 +630,35 @@ function StudentDashboard({ user, onLogout }: { user: UserType; onLogout: () => 
             <form onSubmit={submitFeedback} className="glass rounded-xl p-4 md:p-6 space-y-4">
               <h2 className="text-lg font-semibold">Submit New Feedback</h2>
               <div className="space-y-3">
-                <div>
+                <div className="relative">
                   <label className="block text-sm text-white/70 mb-1">Category</label>
-                  <div className="flex flex-wrap gap-2">
-                    {CATEGORIES.map((c) => {
-                      const s = CATEGORY_STYLES[c];
-                      const active = selCat === c;
-                      return (
-                        <button
-                          type="button"
-                          key={c}
-                          onClick={() => setSelCat(c)}
-                          className={`px-3 py-1.5 rounded-lg border transition ${s.bg} ${s.border} ${s.text} ${active ? "ring-2 ring-white/30" : "hover:bg-white/10"}`}
-                        >
-                          {c}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setMenuOpen((v) => !v)}
+                    className="w-full justify-between inline-flex items-center px-3 py-2 rounded-lg border bg-white/10 border-white/10 hover:bg-white/15"
+                  >
+                    <span className="text-white/90">
+                      {CATEGORY_LABELS[selCat]}
+                    </span>
+                    <svg className="w-4 h-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  {menuOpen && (
+                    <div className="absolute z-20 mt-2 w-full glass rounded-lg p-1 max-h-56 overflow-auto">
+                      {CATEGORIES.map((c) => {
+                        const s = CATEGORY_STYLES[c];
+                        return (
+                          <button
+                            type="button"
+                            key={c}
+                            onClick={() => { setSelCat(c); setMenuOpen(false); }}
+                            className={`w-full text-left px-3 py-2 rounded-md border ${s.bg} ${s.border} ${s.text} hover:bg-white/10`}
+                          >
+                            {CATEGORY_LABELS[c]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
                 {selCat === "others" && (
                   <div>
@@ -824,7 +860,7 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
                     : "bg-white/5 border-white/10 hover:bg-white/10"
                 }`}
               >
-                {c}
+                {c === "all" ? "All" : CATEGORY_LABELS[c] || c}
               </button>
             ))}
           </div>
