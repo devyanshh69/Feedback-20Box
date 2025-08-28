@@ -373,6 +373,49 @@ function AvatarBubble({ emoji, size = 36 }: { emoji?: string; size?: number }) {
   );
 }
 
+function LogoutConfirmModal({ isOpen, onClose, onConfirm, userName }: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  userName: string;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative glass rounded-xl p-6 w-full max-w-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
+            <LogOut className="w-5 h-5 text-red-400" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-white">Confirm Logout</h3>
+            <p className="text-sm text-white/70">Are you sure you want to logout?</p>
+          </div>
+        </div>
+        <p className="text-sm text-white/80 mb-6">
+          You will be logged out as <span className="font-medium">{userName}</span> and redirected to the login page.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white/90 hover:bg-white/10 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-4 py-2 rounded-lg bg-red-500/20 border border-red-400/30 text-red-300 hover:bg-red-500/30 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Header({
   user,
   onLogout,
