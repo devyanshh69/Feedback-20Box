@@ -134,8 +134,8 @@ const AVATARS = [
   "👩🏼",
   "👩🏽",
   "👩🏾",
-  "👨🏻",
-  "��🏼",
+  "👨��",
+  "👨🏼",
   "👨🏽",
 ];
 
@@ -487,11 +487,17 @@ function Header({
             <AvatarBubble emoji={user.avatar} size={28} />
             <span className="text-sm">{user.name}</span>
           </div>
-          <button onClick={confirmAndLogout} className="btn-ghost">
+          <button onClick={() => setShowLogoutModal(true)} className="btn-ghost">
             Logout
           </button>
         </div>
       </div>
+      <LogoutConfirmModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+        userName={user.name}
+      />
     </header>
   );
 }
