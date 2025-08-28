@@ -15,6 +15,16 @@ import {
   XCircle,
   Check,
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 // Types
 type Role = "student" | "admin";
@@ -152,6 +162,9 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="absolute top-6 left-0 right-0 text-center px-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">Anonymous Feedback Box</h1>
+      </div>
       <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-stretch">
         <div className="hidden md:flex flex-col justify-between p-8 rounded-2xl glass drop-shadow-glow">
           <div>
@@ -313,6 +326,9 @@ function Header({
   const [open, setOpen] = useState(false);
   const hasAlert = notifications?.some((n) => n.status !== "pending");
 
+  const confirmAndLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) onLogout();
+  };
   return (
     <header className="sticky top-0 z-40">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -366,7 +382,7 @@ function Header({
             <AvatarBubble emoji={user.avatar} size={28} />
             <span className="text-sm">{user.name}</span>
           </div>
-          <button onClick={onLogout} className="btn-ghost">
+          <button onClick={confirmAndLogout} className="btn-ghost">
             Logout
           </button>
         </div>
@@ -776,6 +792,17 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
     setFeedbacks((prev) => prev.map((f) => (f.id === id ? { ...f, status } : f)));
   }
 
+  const analytics = useMemo(() => {
+    const byCat: Record<string, { category: string; pending: number; accepted: number; denied: number; total: number }> = {};
+    feedbacks.forEach((f) => {
+      const key = f.customCategory || f.category;
+      if (!byCat[key]) byCat[key] = { category: key, pending: 0, accepted: 0, denied: 0, total: 0 };
+      byCat[key][f.status] += 1 as any;
+      byCat[key].total += 1;
+    });
+    return Object.values(byCat).sort((a, b) => b.total - a.total);
+  }, [feedbacks]);
+
   return (
     <div className="min-h-screen">
       <Header user={user} onLogout={onLogout} />
@@ -811,6 +838,25 @@ function AdminDashboard({ user, onLogout }: { user: UserType; onLogout: () => vo
               animate on hover.
             </p>
           </div>
+
+          <div className="glass rounded-xl p-4">
+            <p className="text-sm font-semibold mb-2">Analytics</p>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={analytics}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
+                  <XAxis dataKey="category" stroke="rgba(255,255,255,0.7)" tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }} />
+                  <YAxis stroke="rgba(255,255,255,0.7)" tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }} allowDecimals={false} />
+                  <Tooltip contentStyle={{ background: "rgba(0,0,0,0.6)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "white" }} />
+                  <Legend wrapperStyle={{ color: "white" }} />
+                  <Bar dataKey="accepted" stackId="a" fill="#34d399" />
+                  <Bar dataKey="denied" stackId="a" fill="#f87171" />
+                  <Bar dataKey="pending" stackId="a" fill="#a78bfa" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           {visible.length === 0 && (
             <div className="glass rounded-xl p-6 text-white/70">No feedback to review.</div>
           )}
