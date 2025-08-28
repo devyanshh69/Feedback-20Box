@@ -14,6 +14,10 @@ import {
   ShieldX,
   XCircle,
   Check,
+  BarChart3,
+  LogOut,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -173,6 +177,8 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
   const [adminPass, setAdminPass] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<string>(AVATARS[0]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
 
   function handleStudentLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -282,14 +288,27 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                 <label className="block text-sm text-white/70 mb-1">
                   Password
                 </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder="••••••••"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 pr-12 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/80 transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
               <div>
                 <label className="block text-sm text-white/70 mb-2">
@@ -336,13 +355,26 @@ function LoginView({ onLogin }: { onLogin: (user: UserType) => void }) {
                 <label className="block text-sm text-white/70 mb-1">
                   <p>Password </p>
                 </label>
-                <input
-                  type="password"
-                  value={adminPass}
-                  onChange={(e) => setAdminPass(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  placeholder=""
-                />
+                <div className="relative">
+                  <input
+                    type={showAdminPassword ? "text" : "password"}
+                    value={adminPass}
+                    onChange={(e) => setAdminPass(e.target.value)}
+                    className="w-full px-4 py-3 pr-12 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+                    placeholder=""
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowAdminPassword(!showAdminPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/80 transition-colors"
+                  >
+                    {showAdminPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
               {error && <p className="text-red-400 text-sm">{error}</p>}
               <button type="submit" className="btn-primary w-full">
@@ -371,6 +403,61 @@ function AvatarBubble({ emoji, size = 36 }: { emoji?: string; size?: number }) {
   );
 }
 
+function LogoutConfirmModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  userName,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  userName: string;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center min-h-screen p-4">
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+        onClick={onClose}
+      />
+      <div className="relative glass rounded-xl p-6 w-full max-w-md transform transition-all duration-200 scale-100">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
+            <LogOut className="w-5 h-5 text-red-400" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-white">Confirm Logout</h3>
+            <p className="text-sm text-white/70">
+              Are you sure you want to logout?
+            </p>
+          </div>
+        </div>
+        <p className="text-sm text-white/80 mb-6">
+          You will be logged out as{" "}
+          <span className="font-medium">{userName}</span> and redirected to the
+          login page.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white/90 hover:bg-white/10 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-4 py-2 rounded-lg bg-red-500/20 border border-red-400/30 text-red-300 hover:bg-red-500/30 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Header({
   user,
   onLogout,
@@ -381,19 +468,58 @@ function Header({
   notifications?: { id: string; text: string; status: Feedback["status"] }[];
 }) {
   const [open, setOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const hasAlert = notifications?.some((n) => n.status !== "pending");
 
-  const confirmAndLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) onLogout();
+  const handleLogout = () => {
+    setShowLogoutModal(false);
+    onLogout();
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 10) {
+        // Always show header at top
+        setIsHeaderVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down and past 100px - hide header
+        setIsHeaderVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show header
+        setIsHeaderVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
   return (
-    <header className="sticky top-0 z-40">
+    <header
+      className={`sticky top-0 z-40 transition-transform duration-300 ease-in-out ${
+        isHeaderVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <a
           href="#"
           className="inline-flex items-center gap-2 font-extrabold text-lg"
         >
-          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 drop-shadow-glow" />
+          <div
+            className="h-8 w-8 rounded-xl drop-shadow-glow"
+            style={{
+              backgroundImage:
+                "url(https://cdn.builder.io/api/v1/image/assets%2Fe23b91e5618940f6856f4b7325f6f25e%2F6a1f670d95234b65b6971df5dcd52478)",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
+          />
           Anonymous Feedback Box
         </a>
         <div className="flex items-center gap-3">
@@ -440,11 +566,20 @@ function Header({
             <AvatarBubble emoji={user.avatar} size={28} />
             <span className="text-sm">{user.name}</span>
           </div>
-          <button onClick={confirmAndLogout} className="btn-ghost">
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="btn-ghost"
+          >
             Logout
           </button>
         </div>
       </div>
+      <LogoutConfirmModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+        userName={user.name}
+      />
     </header>
   );
 }
@@ -717,7 +852,7 @@ function StudentDashboard({
                     </svg>
                   </button>
                   {menuOpen && (
-                    <div className="absolute z-20 mt-2 w-full glass rounded-lg p-1 max-h-56 overflow-auto">
+                    <div className="absolute z-20 mt-2 w-full backdrop-blur-xl border border-white/10 shadow-lg bg-black rounded-lg p-1 max-h-56 overflow-auto">
                       {CATEGORIES.map((c) => {
                         const s = CATEGORY_STYLES[c];
                         return (
@@ -903,6 +1038,9 @@ function AdminDashboard({
 }) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(loadFeedbacks());
   const [filter, setFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<"feedback" | "statistics">(
+    "feedback",
+  );
 
   useEffect(() => {
     saveFeedbacks(feedbacks);
@@ -960,89 +1098,185 @@ function AdminDashboard({
     <div className="min-h-screen">
       <Header user={user} onLogout={onLogout} />
 
-      <div className="container mx-auto px-4 mt-6 grid lg:grid-cols-[260px_1fr] gap-6">
-        {/* Taskbar / Sidebar */}
-        <aside className="glass rounded-xl p-4 h-fit sticky top-20">
-          <p className="font-semibold mb-3 flex items-center gap-2">
-            <Filter className="w-4 h-4" /> Categories
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setFilter(c)}
-                className={`px-3 py-2 rounded-lg text-left border transition ${
-                  filter === c
-                    ? "bg-white/15 border-white/15"
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
-                }`}
-              >
-                {c === "all" ? "All" : CATEGORY_LABELS[c] || c}
-              </button>
-            ))}
+      <div className="container mx-auto px-4 mt-6">
+        {/* Tab Navigation */}
+        <div className="glass rounded-xl p-4 mb-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab("feedback")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === "feedback"
+                  ? "bg-white/15 text-white"
+                  : "bg-white/5 text-white/70 hover:bg-white/10"
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              Feedback Review
+            </button>
+            <button
+              onClick={() => setActiveTab("statistics")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === "statistics"
+                  ? "bg-white/15 text-white"
+                  : "bg-white/5 text-white/70 hover:bg-white/10"
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              Statistics
+            </button>
           </div>
-        </aside>
+        </div>
 
-        {/* Main content */}
-        <main className="space-y-4">
-          <div className="glass rounded-xl p-4">
-            <p className="text-sm text-white/80">
-              Review student feedback. Accept or deny below each post. Buttons
-              animate on hover.
-            </p>
+        {activeTab === "feedback" && (
+          <div className="grid lg:grid-cols-[260px_1fr] gap-6">
+            {/* Taskbar / Sidebar */}
+            <aside className="glass rounded-xl p-4 h-fit sticky top-20">
+              <p className="font-semibold mb-3 flex items-center gap-2">
+                <Filter className="w-4 h-4" /> Categories
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
+                {categories.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setFilter(c)}
+                    className={`px-3 py-2 rounded-lg text-left border transition ${
+                      filter === c
+                        ? "bg-white/15 border-white/15"
+                        : "bg-white/5 border-white/10 hover:bg-white/10"
+                    }`}
+                  >
+                    {c === "all" ? "All" : CATEGORY_LABELS[c] || c}
+                  </button>
+                ))}
+              </div>
+            </aside>
+
+            {/* Main content */}
+            <main className="space-y-4">
+              <div className="glass rounded-xl p-4">
+                <p className="text-sm text-white/80">
+                  Review student feedback. Accept or deny below each post.
+                  Buttons animate on hover.
+                </p>
+              </div>
+
+              {visible.length === 0 && (
+                <div className="glass rounded-xl p-6 text-white/70">
+                  No feedback to review.
+                </div>
+              )}
+              {visible.map((fb) => (
+                <FeedbackCard
+                  key={fb.id}
+                  fb={fb}
+                  canModerate
+                  onAccept={() => setStatus(fb.id, "accepted")}
+                  onDeny={() => setStatus(fb.id, "denied")}
+                />
+              ))}
+            </main>
           </div>
+        )}
 
-          <div className="glass rounded-xl p-4">
-            <p className="text-sm font-semibold mb-2">Analytics</p>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analytics}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.08)"
-                  />
-                  <XAxis
-                    dataKey="category"
-                    stroke="rgba(255,255,255,0.7)"
-                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-                  />
-                  <YAxis
-                    stroke="rgba(255,255,255,0.7)"
-                    tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-                    allowDecimals={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      background: "rgba(0,0,0,0.6)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 10,
-                      color: "white",
-                    }}
-                  />
-                  <Legend wrapperStyle={{ color: "white" }} />
-                  <Bar dataKey="accepted" stackId="a" fill="#34d399" />
-                  <Bar dataKey="denied" stackId="a" fill="#f87171" />
-                  <Bar dataKey="pending" stackId="a" fill="#a78bfa" />
-                </BarChart>
-              </ResponsiveContainer>
+        {activeTab === "statistics" && (
+          <div className="space-y-6">
+            <div className="glass rounded-xl p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
+                Feedback Analytics
+              </h2>
+              <p className="text-sm text-white/80 mb-6">
+                Overview of feedback submissions by category and status.
+              </p>
+
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.08)"
+                    />
+                    <XAxis
+                      dataKey="category"
+                      stroke="rgba(255,255,255,0.7)"
+                      tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                    />
+                    <YAxis
+                      stroke="rgba(255,255,255,0.7)"
+                      tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: "rgba(0,0,0,0.8)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: 10,
+                        color: "white",
+                      }}
+                    />
+                    <Legend wrapperStyle={{ color: "white" }} />
+                    <Bar
+                      dataKey="accepted"
+                      stackId="a"
+                      fill="#34d399"
+                      name="Accepted"
+                    />
+                    <Bar
+                      dataKey="denied"
+                      stackId="a"
+                      fill="#f87171"
+                      name="Denied"
+                    />
+                    <Bar
+                      dataKey="pending"
+                      stackId="a"
+                      fill="#a78bfa"
+                      name="Pending"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Accepted</span>
+                </div>
+                <p className="text-2xl font-bold text-emerald-400">
+                  {feedbacks.filter((f) => f.status === "accepted").length}
+                </p>
+              </div>
+
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-red-500/20 border border-red-400/30 flex items-center justify-center">
+                    <XCircle className="w-4 h-4 text-red-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Denied</span>
+                </div>
+                <p className="text-2xl font-bold text-red-400">
+                  {feedbacks.filter((f) => f.status === "denied").length}
+                </p>
+              </div>
+
+              <div className="glass rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-8 w-8 rounded-lg bg-violet-500/20 border border-violet-400/30 flex items-center justify-center">
+                    <Filter className="w-4 h-4 text-violet-400" />
+                  </div>
+                  <span className="text-sm font-semibold">Pending</span>
+                </div>
+                <p className="text-2xl font-bold text-violet-400">
+                  {feedbacks.filter((f) => f.status === "pending").length}
+                </p>
+              </div>
             </div>
           </div>
-
-          {visible.length === 0 && (
-            <div className="glass rounded-xl p-6 text-white/70">
-              No feedback to review.
-            </div>
-          )}
-          {visible.map((fb) => (
-            <FeedbackCard
-              key={fb.id}
-              fb={fb}
-              canModerate
-              onAccept={() => setStatus(fb.id, "accepted")}
-              onDeny={() => setStatus(fb.id, "denied")}
-            />
-          ))}
-        </main>
+        )}
       </div>
     </div>
   );
